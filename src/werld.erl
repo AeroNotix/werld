@@ -3,7 +3,7 @@
 -include_lib("kernel/src/inet_dns.hrl").
 
 -export([net_adm_world/0]).
--export([inet_res_nslookup/1]).
+-export([inet_res_nslookup/0]).
 
 net_adm_world() ->
     try
@@ -13,14 +13,16 @@ net_adm_world() ->
     end.
 
 
-inet_res_nslookup(CName) ->
+inet_res_nslookup() ->
+    {ok, CName} = application:get_env(werld, cname),
     try
         {ok, Msg} = inet_res:nslookup(CName, in, a),
         ExtractedHosts = extract_hosts(Msg),
         [begin
              true = net_kernel:connect(Host),
              Host
-         end || Host <- ExtractedHosts]
+         end || Host <- ExtractedHosts],
+        ok
     catch
         E:R ->
             lager:error("Error looking up hosts: ~p", [{E, R, erlang:get_stacktrace()}])
