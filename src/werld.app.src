@@ -1,0 +1,16 @@
+{application, 'werld',
+ [{description, "Helper functions to discover Erlang nodes"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, {'werld_app', []}},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {contributors, []},
+  {licenses, []},
+  {links, []}
+ ]}.
