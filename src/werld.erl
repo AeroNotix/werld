@@ -14,7 +14,7 @@ net_adm_world() ->
 
 
 inet_res_nslookup() ->
-    {ok, CName} = application:get_env(werld, cname),
+    {ok, CName} = application:get_env(werld, discovery_cname),
     try
         {ok, Msg} = inet_res:nslookup(CName, in, a),
         ExtractedHosts = extract_hosts(Msg),
