@@ -2,9 +2,6 @@
 
 -behaviour(gen_server).
 
-
--include_lib("kernel/src/inet_dns.hrl").
-
 -export([start_link/0]).
 -export([code_change/3]).
 -export([handle_call/3]).
