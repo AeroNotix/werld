@@ -19,6 +19,7 @@ inet_res_nslookup() ->
         {ok, Msg} = inet_res:nslookup(CName, in, a),
         ExtractedHosts = extract_hosts(Msg),
         [begin
+             lager:error("Attempting to connect to: ~p", [Host]),
              true = net_kernel:connect(Host),
              Host
          end || Host <- ExtractedHosts],
@@ -32,4 +33,5 @@ extract_hosts(#dns_rec{anlist=ANList}) ->
     [data_to_node_name(Data) || #dns_rr{data=Data} <- ANList].
 
 data_to_node_name({A, B, C, D}) ->
-    list_to_atom(lists:flatten(io_lib:format("derl@~b.~b.~b.~b", [A, B, C, D]))).
+    {ok, Release} = application:get_env(werld, expected_release_name),
+    list_to_atom(lists:flatten(io_lib:format("~p@~b.~b.~b.~b", [Release, A, B, C, D]))).
