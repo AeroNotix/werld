@@ -16,7 +16,7 @@ start_link() ->
     gen_server:start_link(?MODULE, [], []).
 
 init([]) ->
-    Interval = application:get_env(werld, discover_interval, 1000 * 60 * 20),
+    Interval = application:get_env(werld, discover_interval, 1000 * 60 * 1),
     self() ! discover_nodes,
     {ok, #state{ interval = Interval }}.
 
