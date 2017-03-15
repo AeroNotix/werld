@@ -26,7 +26,8 @@ inet_res_nslookup() ->
         ok
     catch
         E:R ->
-            lager:error("Error looking up hosts: ~p", [{E, R, erlang:get_stacktrace()}])
+            lager:error("Error looking up hosts: ~p", [{E, R, erlang:get_stacktrace()}]),
+            {error, {E, R}}
     end.
 
 extract_hosts(#dns_rec{anlist=ANList}) ->
