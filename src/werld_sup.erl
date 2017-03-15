@@ -35,4 +35,4 @@ init([]) ->
                   true ->
                       [?CHILD(werld_cluster, worker)]
               end,
-    {ok, { {one_for_all, 0, 1}, Workers} }.
+    {ok, { {one_for_all, 5, 10}, Workers} }.
