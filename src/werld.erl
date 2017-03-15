@@ -19,8 +19,9 @@ inet_res_nslookup() ->
         {ok, Msg} = inet_res:nslookup(CName, in, a),
         ExtractedHosts = extract_hosts(Msg),
         [begin
-             lager:error("Attempting to connect to: ~p", [Host]),
+             lager:info("Attempting to connect to: ~p", [Host]),
              true = net_kernel:connect(Host),
+             lager:info("Connected to: ~p", [Host]),
              Host
          end || Host <- ExtractedHosts],
         ok
