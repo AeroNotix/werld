@@ -4,6 +4,8 @@
 
 -export([net_adm_world/0]).
 -export([inet_res_nslookup/0]).
+-export([expected_nodes/0]).
+
 
 net_adm_world() ->
     try
@@ -14,22 +16,25 @@ net_adm_world() ->
 
 
 inet_res_nslookup() ->
-    {ok, CName} = application:get_env(werld, discovery_cname),
     try
-        {ok, Msg} = inet_res:nslookup(CName, in, a),
-        ExtractedHosts = extract_hosts(Msg),
+        ExpectedNodes = expected_nodes(),
         [begin
              lager:info("Attempting to connect to: ~p", [Host]),
              true = net_kernel:connect(Host),
              lager:info("Connected to: ~p", [Host]),
              Host
-         end || Host <- ExtractedHosts],
+         end || Host <- ExpectedNodes],
         ok
     catch
         E:R ->
             lager:error("Error looking up hosts: ~p", [{E, R, erlang:get_stacktrace()}]),
             {error, {E, R}}
     end.
+
+expected_nodes() ->
+    {ok, CName} = application:get_env(werld, discovery_cname),
+    {ok, Msg} = inet_res:nslookup(CName, in, a),
+    extract_hosts(Msg).
 
 extract_hosts(#dns_rec{anlist=ANList}) ->
     [data_to_node_name(Data) || #dns_rr{data=Data} <- ANList].
