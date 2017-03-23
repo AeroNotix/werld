@@ -34,7 +34,7 @@ inet_res_nslookup() ->
 expected_nodes() ->
     {ok, CName} = application:get_env(werld, discovery_cname),
     {ok, Msg} = inet_res:nslookup(CName, in, a),
-    extract_hosts(Msg).
+    extract_hosts(Msg) -- [node()].
 
 extract_hosts(#dns_rec{anlist=ANList}) ->
     [data_to_node_name(Data) || #dns_rr{data=Data} <- ANList].
