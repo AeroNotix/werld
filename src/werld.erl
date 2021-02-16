@@ -26,9 +26,9 @@ inet_res_nslookup() ->
          end || Host <- ExpectedNodes],
         ok
     catch
-        E:R ->
-            lager:error("Error looking up hosts: ~p", [{E, R, erlang:get_stacktrace()}]),
-            {error, {E, R}}
+        E:R:S ->
+            lager:error("Error looking up hosts: ~p", [{E, R, S}]),
+            {error, {E, R}, S}
     end.
 
 expected_nodes() ->
